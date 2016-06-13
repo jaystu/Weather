@@ -7,30 +7,26 @@
 //
 
 import XCTest
+import CoreLocation
 @testable import Weather
 
 class WeatherTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
+    // Tests to confirm that the Hour initializer returns nil when temperature or icon is empty
+    func testHourInitialization() {
+        // Success case.
+        let potentialHour = Hour(time: NSDate(), temperature: "75", icon: "clear-day")
+        XCTAssertNotNil(potentialHour)
+        
+        // Failure cases.
+        let noTemperature = Hour(time: NSDate(), temperature: "", icon: "clear-day")
+        XCTAssertNil(noTemperature, "Empty temperature is invalid")
+        
+        let noIcon = Hour(time: NSDate(), temperature: "75", icon: "")
+        XCTAssertNil(noIcon, "Empty icon is invalid")
+        
+        let noTempOrIcon = Hour(time: NSDate(), temperature: "", icon: "")
+        XCTAssertNil(noTempOrIcon, "Both temperature and icon are empty and therefore invalid")
     }
     
 }
