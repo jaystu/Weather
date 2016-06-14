@@ -26,7 +26,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
     
-    // This constant controls the number of temperatures by hour shown in the future, 48 max
+    // This constant controls the number of furture temperatures shown, 48 max
     let numberOfHoursShown = 12
     
     let locationManager = CLLocationManager()
@@ -99,19 +99,22 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
                 print(error)
             }
         }
+        print("requesting")
     }
     
     func completionHandler(value : JSON) {
         json = value
         
         // Get data for next hours
-        for index in 0..<self.numberOfHoursShown {
-            let time = NSDate(timeIntervalSince1970: Double(self.json["hourly"]["data"][index]["time"].stringValue)!)
-            let temperature = self.json["hourly"]["data"][index]["temperature"].stringValue
-            let icon = self.json["hourly"]["data"][index]["icon"].stringValue
-            
-            if let hour = Hour(time: time, temperature: temperature, icon: icon) {
-                hours += [hour]
+        if hours.count == 0 {
+            for index in 0...self.numberOfHoursShown {
+                let time = NSDate(timeIntervalSince1970: Double(self.json["hourly"]["data"][index]["time"].stringValue)!)
+                let temperature = self.json["hourly"]["data"][index]["temperature"].stringValue
+                let icon = self.json["hourly"]["data"][index]["icon"].stringValue
+                
+                if let hour = Hour(time: time, temperature: temperature, icon: icon) {
+                    hours += [hour]
+                }
             }
         }
         
